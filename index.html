@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emir Günsarı</title>
+  <meta name="description" content="Emir Günsarı" />
+  <meta name="theme-color" content="#000000" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; margin: 0; }
+    html, body { height: 100%; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      justify-items: center;
+      padding: 0 16px;
+    }
+    h1 {
+      font-size: clamp(1.75rem, 5vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      padding-top: clamp(32px, 8vh, 80px);
+      text-align: center;
+    }
+    nav {
+      align-self: center;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 12vh;
+    }
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border: 1px solid #333;
+      border-radius: 999px;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+    a:hover, a:focus-visible { background: #fff; color: #000; border-color: #fff; outline: none; }
+  </style>
+</head>
+<body>
+  <h1>Emir Günsarı</h1>
+  <nav>
+    <a href="https://github.com/EmirGunsari" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/emirgunsari/" target="_blank" rel="noopener">LinkedIn</a>
+  </nav>
+</body>
+</html>
