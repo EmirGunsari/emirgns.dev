@@ -1,6 +1,6 @@
 {
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/beauty/:path*", "destination": "/beauty/index.html" }
+    { "source": "/beauty/((?!assets/).*)", "destination": "/beauty/index.html" }
   ]
 }
