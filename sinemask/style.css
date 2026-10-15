@@ -1,0 +1,445 @@
+:root {
+    --bg-color: #0f0f13;
+    --stem-color: #2d5a27;
+    --flower-base: #ff69b4;
+    --flower-dark: #c71585;
+    --flower-light: #ffb7c5;
+    --wrap-color: #e6d0b3;
+    --wrap-shadow: #d1bfa0;
+    --ribbon-color: #d32f2f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at 50% 100%, #1f141c, #0f0f13);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    font-family: 'Playfair Display', serif;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 0;
+}
+
+.bouquet-wrapper {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transform-origin: bottom center;
+    animation: sway 6s ease-in-out infinite alternate;
+}
+
+.bouquet {
+    position: absolute;
+    bottom: 150px;
+    width: 100%;
+    height: 400px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Bouquet Wrap */
+.bouquet-wrap-back {
+    position: absolute;
+    bottom: 0;
+    width: 450px;
+    height: 300px;
+    background: var(--wrap-color);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform: perspective(500px) rotateX(10deg);
+    z-index: 1;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    animation: wrapOpenBack 1.5s ease-out forwards;
+}
+
+.bouquet-wrap-front {
+    position: absolute;
+    bottom: 0;
+    width: 320px;
+    height: 250px;
+    background: var(--wrap-shadow);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    z-index: 3;
+    animation: wrapOpenFront 1.5s ease-out forwards;
+}
+
+/* Ribbon */
+.ribbon {
+    position: absolute;
+    bottom: 100px;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: ribbonSway 3s ease-in-out infinite alternate;
+}
+
+.ribbon-center {
+    width: 30px;
+    height: 30px;
+    background: var(--ribbon-color);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+.ribbon-left,
+.ribbon-right {
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    background: var(--ribbon-color);
+    border-radius: 50px;
+    z-index: 4;
+}
+
+.ribbon-left {
+    left: -60px;
+    transform: rotate(-15deg);
+}
+
+.ribbon-right {
+    right: -60px;
+    transform: rotate(15deg);
+}
+
+.ribbon::after,
+.ribbon::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    width: 40px;
+    height: 80px;
+    background: var(--ribbon-color);
+    z-index: 3;
+    animation: ribbonTailSway 2.5s ease-in-out infinite alternate;
+}
+
+.ribbon::before {
+    left: -20px;
+    transform: rotate(20deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+    animation-delay: 0.2s;
+}
+
+.ribbon::after {
+    right: -20px;
+    transform: rotate(-20deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+    animation-delay: 0.1s;
+}
+
+.flower-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform-origin: bottom center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 0;
+    transition: height 2s ease-out;
+}
+
+.stem {
+    width: 4px;
+    background: linear-gradient(to right, #1a3c15, var(--stem-color), #1a3c15);
+    border-radius: 2px;
+    z-index: 1;
+    height: 100%;
+}
+
+.flower-head {
+    position: relative;
+    width: 0;
+    height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    transform: scale(0);
+    transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flower-head.bloomed {
+    transform: scale(1);
+}
+
+/* Petal Styles */
+.petal {
+    position: absolute;
+    background: linear-gradient(to top, var(--flower-dark), var(--flower-base), var(--flower-light));
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    transform-origin: bottom center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
+/* Inner center of the flower */
+.center {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ffdb58;
+    border-radius: 50%;
+    z-index: 100;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.message {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    animation: fadeIn 2s ease-out 4s forwards;
+    pointer-events: none;
+}
+
+.message h1 {
+    font-size: 2.5rem;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin: 10px 0;
+}
+
+.love-message {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    animation: fadeIn 2s ease-out 5s forwards;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.love-message p {
+    font-size: 1.8rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    color: #ffb7c5;
+    animation: heartbeat 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes sway {
+    0% {
+        transform: rotate(-2deg);
+    }
+
+    100% {
+        transform: rotate(2deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Poşet açılma animasyonları */
+@keyframes wrapOpenBack {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 450px;
+    }
+}
+
+@keyframes wrapOpenFront {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        width: 320px;
+    }
+}
+
+/* Kurdele sallanma animasyonu */
+@keyframes ribbonSway {
+    0% {
+        transform: rotate(-3deg);
+    }
+
+    100% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Kurdele uçları sallanma animasyonu */
+@keyframes ribbonTailSway {
+    0% {
+        transform: rotate(15deg) translateY(0);
+    }
+
+    100% {
+        transform: rotate(25deg) translateY(-5px);
+    }
+}
+
+/* Kalp atışı animasyonu */
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Leaf styles */
+.leaf {
+    position: absolute;
+    background: linear-gradient(45deg, #1a3c15, var(--stem-color));
+    border-radius: 0 50% 0 50%;
+    transform-origin: 0 100%;
+    opacity: 0;
+    transition: opacity 1s ease 0.5s;
+}
+
+.flower-wrapper.visible .leaf {
+    opacity: 1;
+}
+
+/* ========== RESPONSIVE TASARIM ========== */
+
+/* Tablet Cihazlar (769px-1024px) - Sinem sağ altta kalır */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .bouquet-wrapper {
+        transform: scale(0.85);
+        transform-origin: bottom center;
+    }
+
+    @keyframes sway {
+        0% {
+            transform: scale(0.85) rotate(-2deg);
+        }
+
+        100% {
+            transform: scale(0.85) rotate(2deg);
+        }
+    }
+
+    .message h1 {
+        font-size: 2rem;
+        letter-spacing: 3px;
+    }
+
+    .love-message p {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobil Cihazlar (481px-768px) - Sinem kasımpatı altına */
+@media (max-width: 768px) {
+    .bouquet-wrapper {
+        transform: scale(0.7);
+        transform-origin: bottom center;
+    }
+
+    @keyframes sway {
+        0% {
+            transform: scale(0.7) rotate(-2deg);
+        }
+
+        100% {
+            transform: scale(0.7) rotate(2deg);
+        }
+    }
+
+    .message {
+        top: 2%;
+        padding: 0 15px;
+    }
+
+    .message h1 {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        margin: 5px 0;
+    }
+
+    .love-message {
+        position: static;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .love-message p {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+}
+
+/* Küçük Mobil Cihazlar (0-480px) - Sinem kasımpatı altına */
+@media (max-width: 480px) {
+    .bouquet-wrapper {
+        transform: scale(0.55);
+        transform-origin: bottom center;
+    }
+
+    @keyframes sway {
+        0% {
+            transform: scale(0.55) rotate(-2deg);
+        }
+
+        100% {
+            transform: scale(0.55) rotate(2deg);
+        }
+    }
+
+    .message {
+        top: 1%;
+        padding: 0 10px;
+    }
+
+    .message h1 {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        margin: 4px 0;
+    }
+
+    .love-message {
+        position: static;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .love-message p {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+}
