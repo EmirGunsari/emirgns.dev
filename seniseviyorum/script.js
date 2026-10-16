@@ -20,6 +20,7 @@
   ].slice(0, 75);
 
   const MAIN = "Sinem Seni Seviyorum";
+  const START_DELAY = 2000; // ms: animasyon başlamadan önce bekleme
 
   const canvas = document.getElementById("heart");
   const ctx = canvas.getContext("2d");
@@ -52,11 +53,11 @@
     const toPx = (p) => ({ x: cx + p.x * scale, y: cy + p.y * scale });
 
     // Orta yazı için ayrılan alan
-    const mainSize = Math.max(14, scale * 1.75);
+    const mainSize = Math.max(12, scale * 1.05);
     ctx.font = `800 ${mainSize}px system-ui, "Segoe UI", sans-serif`;
-    const mw = Math.max(ctx.measureText("Seni Seviyorum").width, ctx.measureText("Sinem").width * 1.5);
-    const mainBox = { x: cx - mw / 2 - 10, y: cy - mainSize * 1.7, w: mw + 20, h: mainSize * 3.1 };
-    main = { lines: ["Sinem", "Seni Seviyorum"], x: cx, y: cy - scale * 0.2, size: mainSize };
+    const mw = ctx.measureText(MAIN).width;
+    const mainBox = { x: cx - mw / 2 - 10, y: cy - mainSize * 0.9, w: mw + 20, h: mainSize * 1.8 };
+    main = { text: MAIN, x: cx, y: cy, size: mainSize };
 
     const placed = [mainBox];
     const hit = (b) => placed.some((p) => b.x < p.x + p.w && b.x + b.w > p.x && b.y < p.y + p.h && b.y + b.h > p.y);
@@ -89,7 +90,7 @@
     }
     // Merkezden dışa doğru belirme sırası
     items.sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
-    items.forEach((it, i) => (it.delay = 300 + (i / items.length) * 3800 + rnd() * 250));
+    items.forEach((it, i) => (it.delay = START_DELAY + 300 + (i / items.length) * 3800 + rnd() * 250));
     main.cx = cx; main.cy = cy;
   }
 
@@ -101,7 +102,7 @@
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
 
     // Kalp atışı: sadece hafif nabız
-    const beat = 1 + 0.012 * Math.sin(t / 420) ** 4 * 6;
+    const beat = 1 + 0.006 * Math.sin(t / 700) ** 4;
     ctx.save();
     ctx.translate(main.cx, main.cy); ctx.scale(beat, beat); ctx.translate(-main.cx, -main.cy);
 
@@ -117,19 +118,15 @@
     }
 
     // Ortadaki vurgulu yazı: altın/pembe, parıltılı
-    const mk = ease(Math.min(Math.max((t - 4200) / 1200, 0), 1));
+    const mk = ease(Math.min(Math.max((t - (START_DELAY + 4200)) / 1200, 0), 1));
     if (mk > 0) {
       const pulse = 0.5 + 0.5 * Math.sin(t / 500);
       ctx.globalAlpha = mk;
-      const g = ctx.createLinearGradient(main.x - 160, 0, main.x + 160, 0);
-      g.addColorStop(0, "#ffe9a8"); g.addColorStop(0.5, "#ffffff"); g.addColorStop(1, "#ffb3d9");
-      ctx.shadowColor = `rgba(255, 214, 102, ${0.55 + 0.35 * pulse})`;
-      ctx.shadowBlur = 18 + 14 * pulse;
-      ctx.fillStyle = g;
-      ctx.font = `800 ${main.size * 1.35 * (0.9 + 0.1 * mk)}px system-ui, "Segoe UI", sans-serif`;
-      ctx.fillText(main.lines[0], main.x, main.y - main.size * 0.8);
-      ctx.font = `800 ${main.size * (0.9 + 0.1 * mk)}px system-ui, "Segoe UI", sans-serif`;
-      ctx.fillText(main.lines[1], main.x, main.y + main.size * 0.55);
+      ctx.shadowColor = `rgba(255, 40, 70, ${0.6 + 0.3 * pulse})`;
+      ctx.shadowBlur = 10 + 8 * pulse;
+      ctx.fillStyle = "#ff2442";
+      ctx.font = `800 ${main.size * (0.92 + 0.08 * mk)}px system-ui, "Segoe UI", sans-serif`;
+      ctx.fillText(main.text, main.x, main.y);
       ctx.shadowBlur = 0;
     }
     ctx.restore();
@@ -138,7 +135,7 @@
   }
 
   let resizeTimer;
-  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layout(); t0 = performance.now() - 6000; }, 150); });
+  addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layout(); t0 = performance.now() - (START_DELAY + 6500); }, 150); });
   layout();
   requestAnimationFrame(frame);
 })();
